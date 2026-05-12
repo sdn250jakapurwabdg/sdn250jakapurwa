@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDN 250 Jakapurwa | Saling Berpacu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&family=Merriweather:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'eco-dark': '#0F172A',
+                        'eco-green': '#1E40AF',
+                        'eco-sage': '#93C5FD',
+                        'eco-gold': '#F59E0B',
+                        'eco-cream': '#F8FAFC',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        [x-cloak] { display: none !important; }
+        .page-transition { animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .hero-bg {
+            background-color: #0F172A;
+            background-image: linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.8)), url('image.png');
+            background-size: cover;
+            background-position: center;
+        }
+        .profile-bg-card {
+            background-image: linear-gradient(rgba(30, 64, 175, 0.92), rgba(15, 23, 42, 0.95)), url('image.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: scroll;
+        }
+        .kurikulum-bg-card {
+            background-image: linear-gradient(rgba(30, 64, 175, 0.9), rgba(15, 23, 42, 0.95)), url('image.png');
+            background-size: cover;
+            background-position: center;
+        }
+        .gtk-bg-card {
+            background-image: linear-gradient(rgba(15, 23, 42, 0.9), rgba(30, 64, 175, 0.85)), url('image.png');
+            background-size: cover;
+            background-position: center;
+        }
+        .spmb-bg-card {
+            background-image: linear-gradient(rgba(255, 255, 255, 0.95), rgba(248, 250, 252, 0.98));
+        }
+    </style>
+</head>
+<body class="bg-eco-cream text-slate-800 font-sans" x-data="{ page: 'beranda', subPage: 'sambutan', gtkSubPage: 'struktur', programSubPage: '', spmbSub: 'jadwal', loginModal: false, mobileMenu: false, dropdownOpen: false, gtkDropdownOpen: false, spmbDropdown: false }">
+
+    <nav class="fixed w-full z-50 bg-white/90 backdrop-blur-md border-b border-eco-green/10 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <div class="flex items-center space-x-3 cursor-pointer" @click="page = 'beranda'">
+                    <img src="logo_sdn250jp_hd.png" class="h-14 w-auto drop-shadow-md">
+                    <div>
+                        <span class="block font-bold text-eco-green leading-none text-lg">SDN 250</span>
+                        <span class="block text-xs font-semibold tracking-widest text-eco-gold uppercase">Jakapurwa</span>
+                    </div>
+                </div>
+
+                <div class="hidden md:flex space-x-6 items-center">
+                    <button @click="page = 'beranda'" :class="page === 'beranda' ? 'text-eco-green font-bold border-b-2 border-eco-green' : 'hover:text-eco-green font-medium'">Beranda</button>
+                    <button @click="page = 'profil'" :class="page === 'profil' ? 'text-eco-green font-bold border-b-2 border-eco-green' : 'hover:text-eco-green font-medium'">Profil</button>
+                    
+                    <div class="relative" @click.away="dropdownOpen = false">
+                        <button @click="dropdownOpen = !dropdownOpen; gtkDropdownOpen = false; spmbDropdown = false" :class="['kurikulum', 'program'].includes(page) ? 'text-eco-green font-bold border-b-2 border-eco-green' : 'hover:text-eco-green font-medium'" class="flex items-center">
+                            Program <i class="fas fa-chevron-down ml-2 text-[10px] transition-transform" :class="dropdownOpen ? 'rotate-180' : ''"></i>
+                        </button>
+                        <div x-show="dropdownOpen" class="absolute left-0 mt-3 w-56 bg-white rounded-2xl shadow-xl border border-slate-100 py-2 z-50" x-cloak>
+                            <button @click="page = 'kurikulum'; dropdownOpen = false" class="block w-full text-left px-5 py-3 text-sm hover:bg-eco-cream hover:text-eco-green transition">Kurikulum</button>
+                            <button @click="page = 'program'; programSubPage = 'Kalender Pendidikan'; dropdownOpen = false" class="block w-full text-left px-5 py-3 text-sm hover:bg-eco-cream hover:text-eco-green transition">Kalender Pendidikan</button>
+                            <button @click="page = 'program'; programSubPage = 'Intrakurikuler'; dropdownOpen = false" class="block w-full text-left px-5 py-3 text-sm hover:bg-eco-cream hover:text-eco-green transition">Intrakurikuler</button>
+                            <button @click="page = 'program'; programSubPage = 'Ekstrakurikuler'; dropdownOpen = false" class="block w-full text-left px-5 py-3 text-sm hover:bg-eco-cream hover:text-eco-green transition">Ekstrakurikuler</button>
+                            <button @click="page = 'program'; programSubPage = 'Kokurikuler'; dropdownOpen = false" class="block w-full text-left px-5 py-3 text-sm hover:bg-eco-cream hover:text-eco-green transition">Kokurikuler</button>
+                        </div>
+                    </div>
+
+                    <div class="relative" @click.away="gtkDropdownOpen = false">
+                        <button @click="gtkDropdownOpen = !gtkDropdownOpen; dropdownOpen = false; spmbDropdown = false" :class="page === 'gtk' ? 'text-eco-green font-bold border-b-2 border-eco-green' : 'hover:text-eco-green font-medium'" class="flex items-center">
+                            GTK <i class="fas fa-chevron-down ml-2 text-[10px] transition-transform" :class="gtkDropdownOpen ? 'rotate-180' : ''"></i>
+                        </button>
+                        <div x-show="gtkDropdownOpen" class="absolute left-0 mt-3 w-60 bg-white rounded-2xl shadow-xl border border-slate-100 py-2 z-50" x-cloak>
+                            <button @click="page = 'gtk'; gtkSubPage = 'struktur'; gtkDropdownOpen = false" class="block w-full text-left px-5 py-3 text-sm hover:bg-eco-cream hover:text-eco-green transition">Struktur Organisasi</button>
+                            <button @click="page = 'gtk'; gtkSubPage = 'pendidik'; gtkDropdownOpen = false" class="block w-full text-left px-5 py-3 text-sm hover:bg-eco-cream hover:text-eco-green transition">Daftar Pendidik</button>
+                            <button @click="page = 'gtk'; gtkSubPage = 'tendik'; gtkDropdownOpen = false" class="block w-full text-left px-5 py-3 text-sm hover:bg-eco-cream hover:text-eco-green transition">Tenaga Kependidikan</button>
+                            <button @click="page = 'gtk'; gtkSubPage = 'prestasi'; gtkDropdownOpen = false" class="block w-full text-left px-5 py-3 text-sm hover:bg-eco-cream hover:text-eco-green transition">Prestasi & Inovasi</button>
+                        </div>
+                    </div>
+
+                    <div class="relative" @click.away="spmbDropdown = false">
+                        <button @click="spmbDropdown = !spmbDropdown; dropdownOpen = false; gtkDropdownOpen = false" :class="page === 'spmb' ? 'text-eco-green font-bold border-b-2 border-eco-green' : 'hover:text-eco-green font-medium'" class="flex items-center">
+                            SPMB 2026 <i class="fas fa-chevron-down ml-2 text-[10px] transition-transform" :class="spmbDropdown ? 'rotate-180' : ''"></i>
+                        </button>
+                        <div x-show="spmbDropdown" class="absolute left-0 mt-3 w-64 bg-white rounded-2xl shadow-xl border border-slate-100 py-2 z-50" x-cloak>
+                            <button @click="page = 'spmb'; spmbSub = 'jadwal'; spmbDropdown = false" class="block w-full text-left px-5 py-3 text-sm hover:bg-eco-cream hover:text-eco-green transition">Jadwal Penting</button>
+                            <button @click="page = 'spmb'; spmbSub = 'kuota'; spmbDropdown = false" class="block w-full text-left px-5 py-3 text-sm hover:bg-eco-cream hover:text-eco-green transition">Kuota & Jalur</button>
+                            <button @click="page = 'spmb'; spmbSub = 'syarat'; spmbDropdown = false" class="block w-full text-left px-5 py-3 text-sm hover:bg-eco-cream hover:text-eco-green transition">Persyaratan Dokumen</button>
+                            <hr class="my-2 border-slate-100">
+                            <a href="https://spmb.bandung.go.id" target="_blank" class="block w-full text-left px-5 py-3 text-sm font-bold text-eco-gold hover:bg-eco-gold/10 transition flex items-center justify-between">
+                                Daftar Online <i class="fas fa-external-link-alt text-[10px]"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <button @click="page = 'program'; programSubPage = 'GPBLHS'" :class="programSubPage === 'GPBLHS' ? 'text-eco-green font-bold border-b-2 border-eco-green' : 'hover:text-eco-green font-medium'">GPBLHS</button>
+                    
+                    <button @click="loginModal = true" class="bg-eco-green text-white px-6 py-2 rounded-full font-bold hover:shadow-lg transition">Login</button>
+                </div>
+
+                <div class="md:hidden text-eco-green">
+                    <button @click="mobileMenu = !mobileMenu" class="text-2xl"><i class="fas fa-bars"></i></button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-20 min-h-screen">
+
+        <section x-show="page === 'beranda'" x-cloak class="page-transition hero-bg min-h-[90vh] flex items-center">
+            <div class="max-w-7xl mx-auto px-4 text-center md:text-left">
+                <div class="text-white space-y-6">
+                    <h1 class="text-5xl md:text-7xl font-bold leading-tight uppercase">Saling <br><span class="text-eco-gold italic text-4xl md:text-6xl">Berpacu.</span></h1>
+                    <p class="text-xl text-gray-200 max-w-xl italic">"Terwujudnya peserta didik berkarakter pancasila, unggul, dan berwawasan lingkungan"</p>
+                </div>
+            </div>
+        </section>
+
+        <section x-show="page === 'profil'" x-cloak class="page-transition py-12 max-w-7xl mx-auto px-4">
+            <div class="text-center mb-8">
+                <h2 class="text-4xl font-bold text-eco-green mb-2 uppercase tracking-tight">Profil Sekolah</h2>
+                <p class="text-eco-sage font-medium uppercase tracking-widest text-xs font-bold">Informasi Lengkap SDN 250 Jakapurwa</p>
+            </div>
+
+            <div class="profile-bg-card rounded-[40px] shadow-2xl border border-blue-400/30 flex flex-col overflow-hidden">
+                <div class="flex flex-wrap border-b border-white/10 bg-blue-900/40 backdrop-blur-xl">
+                    <button @click="subPage = 'sambutan'" :class="subPage === 'sambutan' ? 'bg-white text-blue-900 shadow-lg font-bold scale-105' : 'text-white hover:bg-white/10'" class="flex-1 min-w-[150px] py-6 transition-all text-xs uppercase font-bold tracking-widest">KATA SAMBUTAN</button>
+                    <button @click="subPage = 'visi'" :class="subPage === 'visi' ? 'bg-white text-blue-900 shadow-lg font-bold scale-105' : 'text-white hover:bg-white/10'" class="flex-1 min-w-[150px] py-6 transition-all text-xs uppercase font-bold tracking-widest">VISI & MISI</button>
+                    <button @click="subPage = 'tujuan'" :class="subPage === 'tujuan' ? 'bg-white text-blue-900 shadow-lg font-bold scale-105' : 'text-white hover:bg-white/10'" class="flex-1 min-w-[150px] py-6 transition-all text-xs uppercase font-bold tracking-widest">TUJUAN</button>
+                    <button @click="subPage = 'sejarah'" :class="subPage === 'sejarah' ? 'bg-white text-blue-900 shadow-lg font-bold scale-105' : 'text-white hover:bg-white/10'" class="flex-1 min-w-[150px] py-6 transition-all text-xs uppercase font-bold tracking-widest">SEJARAH</button>
+                </div>
+
+                <div class="p-6 md:p-16 text-white">
+                    <div x-show="subPage === 'sambutan'" class="page-transition">
+                        <div class="grid md:grid-cols-3 gap-12 items-start">
+                            <div class="md:col-span-1">
+                                <div class="bg-white/10 backdrop-blur-md p-4 rounded-3xl border border-white/20 shadow-2xl">
+                                    <img src="Quotes Umi.jpg" alt="Kepala Sekolah" class="w-full h-auto rounded-2xl shadow-inner border-2 border-white/30">
+                                    <div class="mt-6 text-center">
+                                        <h4 class="font-bold text-white text-xl leading-tight">Wiwin Winangsih, S.Pd., M.M.Pd.</h4>
+                                        <p class="text-eco-sage font-bold mt-2 uppercase text-xs tracking-wider">Kepala SDN 250 Jakapurwa</p>
+                                        <div class="mt-4 pt-4 border-t border-white/10">
+                                            <p class="text-[10px] opacity-60 italic">NIP. 19710926 200801 2 007</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="md:col-span-2 text-blue-50 leading-relaxed text-justify space-y-5 bg-blue-950/30 p-8 rounded-3xl border border-white/5 backdrop-blur-sm">
+                                <div class="border-l-4 border-eco-gold pl-6 mb-8">
+                                    <h3 class="text-3xl font-black text-white uppercase tracking-tighter">Bismillahirrohmanirrahim</h3>
+                                    <p class="text-xl font-medium text-eco-sage italic">Assalamu‘alaikum Wr. Wb.</p>
+                                </div>
+                                <p>Segala puji hanya untuk Allah SWT dan shalawat serta salam semoga tercurah atas nabi yang terakhir, yaitu nabi kita Muhammad SAW, begitu pula atas keluarga, para sahabat dan para pengikutnya.</p>
+                                <p>Alhamdulillahi robbil alamin kami panjatkan kehadlirat Tuhan Allah SWT, bahwasannya dengan rahmat dan karunia-Nya lah akhirnya Website sekolah ini dengan domain <span class="font-bold text-eco-gold underline cursor-pointer">www.sdn250jakapurwa.sch.id</span> dapat kami perbaharui dan kembangkan. Kami mengucapkan selamat datang di Website kami <strong>SDN 250 JAKAPURWA</strong>.</p>
+                                <p>Dalam perkembangan era globalisasi dan pesatnya kemajuan teknologi dan informasi ini, tidak dapat dipungkiri bahwa keberadaan sebuah website untuk dunia pendidikan khususnya sekolah, sangatlah penting. Media website dapat digunakan sebagai penyedia sarana dalam menyebarluaskan informasi dan perkembangan terkini dari sekolah secara riil. Disamping itu, website juga dapat menjadi ajang promosi sekolah yang cukup efektif.</p>
+                                <p>Saya berharap Website ini dapat dijadikan wahana interaksi pada dunia maya yang positif baik antar civitas akademika maupun masyarakat pada umumnya sehingga dapat menjalin silaturahim yang erat. Mari kita bekerja dan berkarya dengan mengharap Ridho sang Maha Kuasa dan keikhlasan yang tulus dijiwa demi anak bangsa dan negara.</p>
+                                <div class="pt-8 border-t border-white/10">
+                                    <p class="font-bold text-white italic">Aamiin Aamiin Aamiin YRA. Wassalamu‘alaikum Wr. Wb.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div x-show="subPage === 'visi'" class="page-transition space-y-10">
+                        <div class="bg-white/10 p-10 rounded-[40px] border border-white/10 backdrop-blur-md">
+                            <h3 class="text-3xl font-black text-eco-gold mb-6 tracking-tighter flex items-center">
+                                <i class="fas fa-eye mr-4"></i> A. VISI
+                            </h3>
+                            <p class="text-2xl font-bold text-white italic leading-tight mb-8">“Terwujudnya Peserta Didik Berkarakter Pancasila, Unggul, dan Berbudaya Lingkungan,” (SALING BERPACU).</p>
+                            <div class="grid md:grid-cols-3 gap-6">
+                                <div class="bg-blue-900/50 p-6 rounded-2xl border border-blue-400/20">
+                                    <h4 class="font-bold text-eco-sage mb-3 text-lg border-b border-white/10 pb-2">Berkarakter Pancasila</h4>
+                                    <p class="text-sm opacity-90">Insan Berakhlakul karimah, religius, menjadi teladan, dan mengamalkan enam dimensi profil pelajar Pancasila.</p>
+                                </div>
+                                <div class="bg-blue-900/50 p-6 rounded-2xl border border-blue-400/20">
+                                    <h4 class="font-bold text-eco-sage mb-3 text-lg border-b border-white/10 pb-2">Unggul</h4>
+                                    <p class="text-sm opacity-90">Berprestasi sesuai keunikan potensi masing-masing dalam bidang agama, IPTEK, seni, maupun olahraga.</p>
+                                </div>
+                                <div class="bg-blue-900/50 p-6 rounded-2xl border border-blue-400/20">
+                                    <h4 class="font-bold text-eco-sage mb-3 text-lg border-b border-white/10 pb-2">Berbudaya Lingkungan</h4>
+                                    <p class="text-sm opacity-90">Memiliki kepedulian tinggi terhadap pelestarian lingkungan hidup dan peka terhadap alam sekitar.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-blue-950/40 p-10 rounded-[40px] border border-white/10 backdrop-blur-md">
+                            <h3 class="text-3xl font-black text-eco-gold mb-8 tracking-tighter flex items-center">
+                                <i class="fas fa-bullseye mr-4"></i> B. MISI
+                            </h3>
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div class="flex items-start space-x-5 bg-white/5 p-5 rounded-2xl">
+                                    <span class="bg-eco-gold text-blue-900 w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 font-black shadow-lg">1</span>
+                                    <p class="text-sm">Pembiasaan keagamaan: doa, asmaul husna, tahfidz, BTQ, sholat berjamaah, dhuha, dan PHBI.</p>
+                                </div>
+                                <div class="flex items-start space-x-5 bg-white/5 p-5 rounded-2xl">
+                                    <span class="bg-eco-gold text-blue-900 w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 font-black shadow-lg">2</span>
+                                    <p class="text-sm">Pengembangan kreativitas: MTQ, OSN, FLS2N, pembelajaran berbasis IT, seni Sunda, dan olahraga.</p>
+                                </div>
+                                <div class="flex items-start space-x-5 bg-white/5 p-5 rounded-2xl">
+                                    <span class="bg-eco-gold text-blue-900 w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 font-black shadow-lg">3</span>
+                                    <p class="text-sm">Implementasi budaya lingkungan hidup melalui program pembiasaan dan kaderisasi Adiwiyata.</p>
+                                </div>
+                                <div class="flex items-start space-x-5 bg-white/5 p-5 rounded-2xl">
+                                    <span class="bg-eco-gold text-blue-900 w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 font-black shadow-lg">4</span>
+                                    <p class="text-sm">Melestarikan kearifan lokal Budaya Sunda: Rebo Nyunda, tatakrama, dan permainan tradisional.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div x-show="subPage === 'tujuan'" class="page-transition">
+                        <h3 class="text-3xl font-black text-white mb-10 text-center tracking-tighter uppercase">Tujuan Strategis Sekolah</h3>
+                        <div class="grid md:grid-cols-3 gap-8">
+                            <div class="group bg-gradient-to-br from-blue-800 to-blue-950 p-8 rounded-[35px] shadow-xl border border-white/10 hover:border-eco-gold transition-all">
+                                <h4 class="text-eco-gold font-black mb-6 flex items-center text-xl italic uppercase tracking-tighter">
+                                    <i class="fas fa-hourglass-start mr-3"></i> 1 Tahun
+                                </h4>
+                                <ul class="text-sm space-y-4 opacity-90">
+                                    <li><i class="fas fa-check-circle text-eco-sage mr-2"></i> Berjalannya program 6 dimensi Profil Pelajar Pancasila & P5.</li>
+                                    <li><i class="fas fa-check-circle text-eco-sage mr-2"></i> Optimalisasi bimbingan prestasi akademik & ekstrakurikuler.</li>
+                                    <li><i class="fas fa-check-circle text-eco-sage mr-2"></i> Implementasi aktif kader Adiwiyata.</li>
+                                </ul>
+                            </div>
+                            <div class="group bg-gradient-to-br from-blue-700 to-blue-900 p-8 rounded-[35px] shadow-xl border border-white/10 hover:border-eco-gold transition-all">
+                                <h4 class="text-eco-gold font-black mb-6 flex items-center text-xl italic uppercase tracking-tighter">
+                                    <i class="fas fa-hourglass-half mr-3"></i> 2-3 Tahun
+                                </h4>
+                                <ul class="text-sm space-y-4 opacity-90">
+                                    <li><i class="fas fa-star text-eco-sage mr-2"></i> Meningkatnya ketaatan ibadah dan empati sosial warga sekolah.</li>
+                                    <li><i class="fas fa-star text-eco-sage mr-2"></i> Peningkatan juara ajang FLS2N, FL2N, dan OSN.</li>
+                                    <li><i class="fas fa-star text-eco-sage mr-2"></i> Penguatan budaya lingkungan yang lebih masif.</li>
+                                </ul>
+                            </div>
+                            <div class="group bg-gradient-to-br from-blue-900 to-black p-8 rounded-[35px] shadow-xl border border-white/10 hover:border-eco-gold transition-all">
+                                <h4 class="text-eco-gold font-black mb-6 flex items-center text-xl italic uppercase tracking-tighter">
+                                    <i class="fas fa-flag-checkered mr-3"></i> 4-5 Tahun
+                                </h4>
+                                <ul class="text-sm space-y-4 opacity-90">
+                                    <li><i class="fas fa-medal text-eco-sage mr-2"></i> Lulusan berakhlakul karimah dan unggul di IPTEK.</li>
+                                    <li><i class="fas fa-medal text-eco-sage mr-2"></i> Prestasi konsisten di tingkat Nasional.</li>
+                                    <li><i class="fas fa-medal text-eco-sage mr-2"></i> Budaya Pancasila & Adiwiyata melekat permanen.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div x-show="subPage === 'sejarah'" class="page-transition py-20 text-center text-eco-sage italic font-bold">Data Sejarah SDN 250 Jakapurwa sedang dalam proses digitalisasi.</div>
+                </div>
+            </div>
+        </section>
+
+        <section x-show="page === 'gtk'" x-cloak class="page-transition py-12 max-w-7xl mx-auto px-4">
+            <div class="text-center mb-8">
+                <h2 class="text-4xl font-bold text-eco-green mb-2 uppercase tracking-tight">GTK & Struktur</h2>
+                <p class="text-eco-sage font-medium uppercase tracking-widest text-xs font-bold">SDN 250 Jakapurwa</p>
+            </div>
+            <div class="gtk-bg-card rounded-[40px] shadow-2xl border border-white/10 overflow-hidden min-h-[600px]">
+                <div class="p-6 md:p-16 text-white text-center">
+                    <div x-show="gtkSubPage === 'struktur'">
+                        <img src="struktur sekolah.png" alt="Struktur" class="mx-auto rounded-3xl border-4 border-white/20">
+                    </div>
+                    <div x-show="gtkSubPage !== 'struktur'" class="py-20 text-eco-sage italic">Data sedang diperbarui.</div>
+                </div>
+            </div>
+        </section>
+
+        <section x-show="page === 'kurikulum'" x-cloak class="page-transition py-12 max-w-7xl mx-auto px-4">
+            <div class="text-center mb-8">
+                <h2 class="text-4xl font-bold text-eco-green mb-2 uppercase tracking-tight">Program Sekolah</h2>
+                <p class="text-eco-sage font-medium uppercase tracking-widest text-xs">Kurikulum Merdeka</p>
+            </div>
+            <div class="kurikulum-bg-card rounded-[40px] shadow-2xl border border-white/10 overflow-hidden">
+                <div class="p-8 md:p-16 text-white">
+                    <h3 class="text-3xl font-black text-center uppercase mb-6">Kurikulum Merdeka 2025/2026</h3>
+                    <p class="text-justify opacity-90">Mencerminkan semangat kebebasan belajar dan pendekatan inovatif dalam memberikan pengalaman pembelajaran yang menyenangkan...</p>
+                </div>
+            </div>
+        </section>
+
+        <section x-show="page === 'program'" x-cloak class="page-transition py-12 max-w-7xl mx-auto px-4">
+            <div class="text-center mb-8">
+                <h2 class="text-4xl font-bold text-eco-green mb-2 uppercase tracking-tight" x-text="programSubPage"></h2>
+                <p class="text-eco-sage font-medium uppercase tracking-widest text-xs font-bold">SDN 250 Jakapurwa</p>
+            </div>
+            <div class="kurikulum-bg-card rounded-[40px] shadow-2xl border border-white/10 overflow-hidden min-h-[400px] flex items-center justify-center">
+                <div class="p-8 text-center">
+                    <i class="fas fa-tools text-eco-gold text-6xl mb-6 animate-bounce"></i>
+                    <h3 class="text-2xl font-bold text-white mb-4">Mohon Maaf</h3>
+                    <p class="text-eco-sage italic">Halaman <span class="text-white not-italic font-bold" x-text="programSubPage"></span> sedang diperbarui.</p>
+                    <button @click="page = 'beranda'; programSubPage = ''" class="mt-8 bg-white/10 hover:bg-white/20 text-white border border-white/20 px-6 py-2 rounded-full transition">Kembali</button>
+                </div>
+            </div>
+        </section>
+
+   <section 
+    x-show="page === 'spmb'" 
+    x-cloak 
+    class="page-transition py-12 min-h-screen bg-cover bg-center bg-fixed relative"
+    style="background-image: url('image.png');"
+>
+    <div class="absolute inset-0 bg-blue-900/60 backdrop-blur-[2px]"></div>
+
+    <div class="relative z-10 max-w-7xl mx-auto px-4">
+        
+        <div class="text-center mb-12">
+            <h2 class="text-4xl md:text-5xl font-black text-white mb-2 uppercase tracking-tight drop-shadow-md">
+                Informasi SPMB 2026
+            </h2>
+            <p class="text-blue-200 font-bold uppercase tracking-widest text-xs">
+                Seleksi Penerimaan Murid Baru
+            </p>
+        </div>
+
+            <div class="bg-white/95 backdrop-blur-md rounded-[40px] shadow-2xl border border-white/20 overflow-hidden min-h-[600px] flex flex-col">
+            
+            <div class="flex flex-wrap bg-slate-100/80 border-b border-slate-200">
+                <button @click="spmbSub = 'jadwal'" :class="spmbSub === 'jadwal' ? 'bg-white text-blue-700 font-bold shadow-sm' : 'text-slate-500 hover:bg-white/50'" class="flex-1 py-5 text-xs uppercase tracking-widest transition-all">Jadwal Utama</button>
+                <button @click="spmbSub = 'kuota'" :class="spmbSub === 'kuota' ? 'bg-white text-blue-700 font-bold shadow-sm' : 'text-slate-500 hover:bg-white/50'" class="flex-1 py-5 text-xs uppercase tracking-widest transition-all">Kuota & Jalur</button>
+                <button @click="spmbSub = 'syarat'" :class="spmbSub === 'syarat' ? 'bg-white text-blue-700 font-bold shadow-sm' : 'text-slate-500 hover:bg-white/50'" class="flex-1 py-5 text-xs uppercase tracking-widest transition-all">Syarat Dokumen</button>
+                <button @click="spmbSub = 'seleksi'" :class="spmbSub === 'seleksi' ? 'bg-white text-blue-700 font-bold shadow-sm' : 'text-slate-500 hover:bg-white/50'" class="flex-1 py-5 text-xs uppercase tracking-widest transition-all">Sistem Seleksi</button>
+            </div>
+
+                <div class="p-8 md:p-16 flex-grow">
+                    <div x-show="spmbSub === 'jadwal'" class="page-transition space-y-8">
+                        <h3 class="text-2xl font-bold text-eco-green border-l-4 border-eco-gold pl-4 uppercase tracking-tight">Agenda Pelaksanaan SPMB 2026</h3>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div class="flex items-center p-6 bg-blue-50 rounded-3xl border border-blue-100">
+                                <div class="bg-eco-green text-white w-12 h-12 rounded-2xl flex items-center justify-center mr-5 shadow-lg"><i class="fas fa-calendar-check"></i></div>
+                                <div>
+                                    <p class="text-[10px] font-bold text-eco-green uppercase opacity-60">Pendataan Calon Murid</p>
+                                    <p class="text-lg font-bold text-slate-800">11 Mei - 5 Juni 2026</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center p-6 bg-blue-50 rounded-3xl border border-blue-100">
+                                <div class="bg-eco-gold text-white w-12 h-12 rounded-2xl flex items-center justify-center mr-5 shadow-lg"><i class="fas fa-user-plus"></i></div>
+                                <div>
+                                    <p class="text-[10px] font-bold text-eco-green uppercase opacity-60">Pendaftaran Jalur Utama</p>
+                                    <p class="text-lg font-bold text-slate-800">22 - 26 Juni 2026</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center p-6 bg-blue-50 rounded-3xl border border-blue-100">
+                                <div class="bg-green-600 text-white w-12 h-12 rounded-2xl flex items-center justify-center mr-5 shadow-lg"><i class="fas fa-bullhorn"></i></div>
+                                <div>
+                                    <p class="text-[10px] font-bold text-eco-green uppercase opacity-60">Pengumuman Hasil Seleksi</p>
+                                    <p class="text-lg font-bold text-slate-800">3 Juli 2026</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center p-6 bg-blue-50 rounded-3xl border border-blue-100">
+                                <div class="bg-indigo-600 text-white w-12 h-12 rounded-2xl flex items-center justify-center mr-5 shadow-lg"><i class="fas fa-school"></i></div>
+                                <div>
+                                    <p class="text-[10px] font-bold text-eco-green uppercase opacity-60">Hari Pertama Masuk Sekolah</p>
+                                    <p class="text-lg font-bold text-slate-800">13 Juli 2026</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div x-show="spmbSub === 'kuota'" class="page-transition space-y-8">
+                        <div class="bg-eco-green p-8 rounded-[35px] text-white flex flex-col md:flex-row justify-between items-center shadow-xl">
+                            <div class="mb-4 md:mb-0">
+                                <h4 class="text-eco-sage font-bold uppercase tracking-widest text-xs mb-1">Kapasitas Sekolah</h4>
+                                <h3 class="text-4xl font-black italic">112 TOTAL SISWA</h3>
+                            </div>
+                            <div class="h-12 w-px bg-white/20 hidden md:block"></div>
+                            <div class="text-center md:text-right">
+                                <p class="text-2xl font-bold">4 Rombongan Belajar</p>
+                                <p class="text-sm opacity-70">Tahun Pelajaran 2026/2027</p>
+                            </div>
+                        </div>
+
+                        <div class="overflow-x-auto rounded-3xl border border-slate-200">
+                            <table class="w-full text-left border-collapse">
+                                <thead class="bg-slate-50">
+                                    <tr class="text-eco-green uppercase text-[10px] font-bold tracking-widest">
+                                        <th class="px-6 py-4 border-b border-slate-200">Jalur Pendaftaran</th>
+                                        <th class="px-6 py-4 border-b border-slate-200">Persentase</th>
+                                        <th class="px-6 py-4 border-b border-slate-200">Kapasitas</th>
+                                        <th class="px-6 py-4 border-b border-slate-200">Detail</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-sm">
+                                    <tr class="hover:bg-slate-50 transition">
+                                        <td class="px-6 py-4 border-b border-slate-100 font-bold">Domisili</td>
+                                        <td class="px-6 py-4 border-b border-slate-100 text-eco-gold font-black text-lg">80%</td>
+                                        <td class="px-6 py-4 border-b border-slate-100">90 Siswa</td>
+                                        <td class="px-6 py-4 border-b border-slate-100 text-xs opacity-70 italic">Dalam Kota: 81 Siswa, Luar Kota: 9 Siswa.</td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50 transition">
+                                        <td class="px-6 py-4 border-b border-slate-100 font-bold">Afirmasi</td>
+                                        <td class="px-6 py-4 border-b border-slate-100 text-eco-gold font-black text-lg">15%</td>
+                                        <td class="px-6 py-4 border-b border-slate-100">17 Siswa</td>
+                                        <td class="px-6 py-4 border-b border-slate-100 text-xs opacity-70 italic">Untuk siswa RMP & PDBK.</td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50 transition">
+                                        <td class="px-6 py-4 border-b border-slate-100 font-bold">Mutasi</td>
+                                        <td class="px-6 py-4 border-b border-slate-100 text-eco-gold font-black text-lg">5%</td>
+                                        <td class="px-6 py-4 border-b border-slate-100">5 Siswa</td>
+                                        <td class="px-6 py-4 border-b border-slate-100 text-xs opacity-70 italic">Perpindahan orang tua/wali atau anak guru.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div x-show="spmbSub === 'syarat'" class="page-transition grid md:grid-cols-2 gap-10">
+                        <div class="space-y-6">
+                            <h4 class="text-xl font-bold text-eco-green flex items-center"><i class="fas fa-folder-open mr-3"></i> Persyaratan Umum</h4>
+                            <div class="grid gap-3">
+                                <div class="p-4 bg-white rounded-2xl border-l-4 border-eco-green shadow-sm text-sm">Akte Kelahiran Asli</div>
+                                <div class="p-4 bg-white rounded-2xl border-l-4 border-eco-green shadow-sm text-sm">Kartu Keluarga Asli</div>
+                                <div class="p-4 bg-white rounded-2xl border-l-4 border-eco-green shadow-sm text-sm">KTP Orang Tua Asli</div>
+                                <div class="p-4 bg-white rounded-2xl border-l-4 border-eco-green shadow-sm text-sm">Surat pernyataan Orang tua</div>
+                            </div>
+                        </div>
+                        <div class="space-y-6">
+                            <h4 class="text-xl font-bold text-eco-gold flex items-center"><i class="fas fa-exclamation-circle mr-3"></i> Syarat Khusus</h4>
+                            <ul class="space-y-4 text-sm text-slate-600 leading-relaxed">
+                                <li class="bg-eco-gold/5 p-4 rounded-2xl"><strong class="text-eco-dark">Domisili:</strong> KK Kota Bandung terbit minimal 1 tahun sebelum 22 Juni 2025.</li>
+                                <li class="bg-eco-gold/5 p-4 rounded-2xl"><strong class="text-eco-dark">Afirmasi:</strong> Terdaftar dalam DTKS Desil 1-5 atau memiliki rekomendasi ULD.</li>
+                                <li class="bg-eco-gold/5 p-4 rounded-2xl"><strong class="text-eco-dark">Mutasi:</strong> Surat Penugasan resmi dari instansi/kantor terkait.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div x-show="spmbSub === 'seleksi'" class="page-transition text-center max-w-2xl mx-auto space-y-8 py-10">
+                        <div class="inline-flex p-6 bg-eco-green text-white rounded-full text-4xl shadow-2xl mb-4"><i class="fas fa-user-clock"></i></div>
+                        <h3 class="text-3xl font-black text-eco-dark uppercase tracking-tighter">Sistem Seleksi Berdasarkan Usia & Jarak</h3>
+                        <p class="text-slate-600 leading-loose italic">"Penerimaan peserta didik di SDN 250 Jakapurwa dilakukan secara transparan melalui urutan prioritas **Usia** dan **Jarak** tempat tinggal ke sekolah."</p>
+                        <div class="flex flex-wrap justify-center gap-4">
+                            <span class="bg-green-100 text-green-800 px-6 py-2 rounded-full font-bold text-sm border border-green-200">BEBAS TES AKADEMIK</span>
+                            <span class="bg-green-100 text-green-800 px-6 py-2 rounded-full font-bold text-sm border border-green-200">TIDAK ADA TES CALISTUNG</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div x-show="loginModal" 
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0"
+             x-transition:enter-end="opacity-100"
+             x-transition:leave="transition ease-in duration-200"
+             x-transition:leave-start="opacity-100"
+             x-transition:leave-end="opacity-0"
+             class="fixed inset-0 z-[100] overflow-y-auto" x-cloak>
+            
+            <div class="fixed inset-0 bg-eco-dark/80 backdrop-blur-sm" @click="loginModal = false"></div>
+
+            <div class="relative min-h-screen flex items-center justify-center p-4">
+                <div class="bg-white w-full max-w-md rounded-[30px] shadow-2xl overflow-hidden relative page-transition" @click.stop>
+                    
+                    <div class="bg-eco-green p-8 text-white text-center relative">
+                        <button @click="loginModal = false" class="absolute top-4 right-4 text-white/50 hover:text-white transition">
+                            <i class="fas fa-times text-xl"></i>
+                        </button>
+                        <img src="logo_sdn250jp_hd.png" class="h-16 mx-auto drop-shadow-md">
+                        <h3 class="text-2xl font-bold uppercase tracking-tight">Sistem Login</h3>
+                        <p class="text-eco-sage text-xs font-bold uppercase tracking-widest mt-1">SDN 250 Jakapurwa</p>
+                    </div>
+
+                    <form class="p-8 space-y-6">
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2 ml-1">Username / NIP</label>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-slate-400">
+                                    <i class="fas fa-user text-sm"></i>
+                                </span>
+                                <input type="text" required
+                                       class="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-eco-green focus:border-transparent outline-none transition"
+                                       placeholder="Masukkan username...">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2 ml-1">Password</label>
+                            <div class="relative" x-data="{ show: false }">
+                                <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-slate-400">
+                                    <i class="fas fa-lock text-sm"></i>
+                                </span>
+                                <input :type="show ? 'text' : 'password'" required
+                                       class="w-full pl-11 pr-12 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-eco-green focus:border-transparent outline-none transition"
+                                       placeholder="••••••••">
+                                <button type="button" @click="show = !show" class="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-eco-green">
+                                    <i class="fas" :class="show ? 'fa-eye-slash' : 'fa-eye'"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between text-sm">
+                            <label class="flex items-center text-slate-600">
+                                <input type="checkbox" class="rounded border-slate-300 text-eco-green focus:ring-eco-green mr-2"> Ingat saya
+                            </label>
+                            <a href="#" class="text-eco-green font-bold hover:underline">Lupa Password?</a>
+                        </div>
+
+                        <button type="submit" 
+                                class="w-full bg-eco-green hover:bg-blue-800 text-white font-bold py-4 rounded-2xl shadow-lg shadow-blue-900/20 transition-all transform active:scale-[0.98] uppercase tracking-widest text-sm">
+                            Masuk ke Sistem <i class="fas fa-arrow-right ml-2"></i>
+                        </button>
+                    </form>
+
+                    <div class="p-6 bg-slate-50 text-center border-t border-slate-100">
+                        <p class="text-xs text-slate-400 font-medium italic">Hanya untuk PTK dan Admin sekolah yang terdaftar.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="bg-eco-dark text-white py-16 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <img src="logo_sdn250jp_hd.png" class="h-16 mx-auto mb-6 grayscale brightness-200 opacity-80">
+            <p class="font-bold text-xl mb-2 italic tracking-[0.2em] uppercase leading-none">SALING BERPACU</p>
+            <div class="border-t border-white/10 pt-8 mt-6">
+                <p class="text-[10px] opacity-40 uppercase tracking-widest font-bold text-eco-sage">&copy; 2026 SDN 250 Jakapurwa - Bandung Kidul.</p>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
